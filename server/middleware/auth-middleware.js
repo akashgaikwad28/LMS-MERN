@@ -5,30 +5,37 @@ const verifyToken = (token, secretKey) => {
 };
 
 const authenticate = (req, res, next) => {
-      const authHeader = req.headers.authorization;
-      console.log(authHeader, "authHeader");
+  const authHeader = req.headers.authorization;
+  console.log(authHeader, "authHeader");
 
-      if (!authHeader) {
-        return res.status(401).json({
-          success: false,
-          message: "User is not authenticated",
-        });
-      }
+  if (!authHeader) {
+    return res.status(401).json({
+      success: false,
+      message: "User is not authenticated",
+    });
+  }
 
-      const token = authHeader.split(" ")[1];
+  const token = authHeader && authHeader.startsWith("Bearer ")
+    ? authHeader.split(" ")[1]
+    : null;
 
-      try {
-        const payload = verifyToken(token, "JWT_SECRET");
+  if (!token) {
+    return res.status(401).json({ success: false, message: "Token missing or malformed" });
+  }
 
-        req.user = payload;
 
-        next();
-      } catch (e) {
-        return res.status(401).json({
-          success: false,
-          message: "invalid token",
-        });
-      }
+  try {
+    const payload = verifyToken(token, "JWT_SECRET");
+
+    req.user = payload;
+
+    next();
+  } catch (e) {
+    return res.status(401).json({
+      success: false,
+      message: "invalid token",
+    });
+  }
 };
 
 module.exports = authenticate;
