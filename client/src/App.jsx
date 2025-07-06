@@ -15,8 +15,7 @@ import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
 
 function App() {
-  const { auth } = useContext(AuthContext);
-
+   
   return (
     <Routes>
       <Route

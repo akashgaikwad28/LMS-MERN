@@ -22,7 +22,7 @@ export default function AuthProvider({ children }) {
   async function handleLoginUser(event) {
     event.preventDefault();
     const data = await loginService(signInFormData);
-    console.log(data, "datadatadatadatadata");
+    console.log(data, "data");
 
     if (data.success) {
       sessionStorage.setItem(
